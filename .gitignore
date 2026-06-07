@@ -1,0 +1,37 @@
+﻿# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Streamlit
+.streamlit/
+
+# User Data (local profiles & logs)
+user_data/
+
+# Large model binaries
+pcos_model.pkl
+mealplan/pcos_model.pkl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files
+data/
+
+# Development
+.devcontainer/

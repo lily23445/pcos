@@ -1,0 +1,103 @@
+/* App background */
+.stApp {
+    background-color: #fff5f8;
+}
+
+/* Global font */
+html, body, [class*="css"] {
+    font-family: 'Poppins', sans-serif;
+    color: #444444;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #b83280;
+    font-weight: 700;
+}
+
+
+/* Buttons */
+div.stButton > button {
+    background-color: #f8bbd0;
+    color: #4a148c;
+    border-radius: 20px;
+    padding: 0.6em 1.5em;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.25s ease;
+}
+div.stButton > button:hover {
+    background-color: #f48fb1;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Tabs */
+.stTabs [role="tablist"] button {
+    background-color: #fce4ec;
+    color: #6a1b9a;
+    font-weight: 600;
+    border-radius: 14px;
+    margin: 0 6px 6px 0;
+    padding: 8px 14px;
+    border: 1px solid #f8bbd0;
+}
+.stTabs [role="tablist"] button[aria-selected="true"] {
+    background-color: #ba68c8;
+    color: #ffffff;
+    border-color: #ba68c8;
+}
+
+/* Inputs */
+input, textarea, select {
+    border-radius: 10px !important;
+    border: 1px solid #f8bbd0 !important;
+    padding: 6px !important;
+    background-color: #ffffff !important;
+}
+
+/* Data blocks */
+.stDataFrame, .stPlotlyChart, .stAltairChart, .stVegaLiteChart, .stMarkdown {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Alerts */
+.stAlert {
+    border-radius: 14px;
+    background-color: #fce4ec;
+    color: #6a1b9a;
+    font-weight: 500;
+}
+
+/* Ensure all labels and input text are visible */
+label, p, span, h1, h2, h3, h4, h5, h6 {
+    color: #4a148c !important;  /* dark purple medico vibe */
+}
+
+/* Fix input text color */
+input, textarea, select {
+    color: #333333 !important;  /* dark grey inside text boxes */
+}
+
+/* Placeholder text */
+::placeholder {
+    color: #888888 !important;
+}
+
+.img-block {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 2px 2px 10px #888888;
+    margin-bottom: 20px;
+}
+

@@ -1,0 +1,10 @@
+streamlit
+scikit-learn
+numpy
+pandas
+matplotlib
+seaborn
+pandas
+
+authlib
+httpx
