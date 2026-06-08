@@ -24,12 +24,6 @@ def inject_local_css(path: str):
         st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
-def get_current_user_email():
-    if hasattr(st, "user") and getattr(st.user, "is_logged_in", False):
-        return getattr(st.user, "email", None)
-    return st.session_state.get("user_email")
-
-
 if os.path.exists("assets/theme.css"):
     inject_local_css("assets/theme.css")
 
@@ -67,27 +61,15 @@ def login_page():
             st.button("Sign in with Google", disabled=True)
             st.info("Google login works once you deploy to Streamlit Cloud.")
 
-        st.markdown("---")
-        st.caption("If Google login is not available or loops, use the local email fallback below.")
-        local_email = st.text_input("Email", value=st.session_state.get("user_email", ""))
-        if st.button("Continue with email"):
-            if local_email.strip():
-                st.session_state["user_email"] = local_email.strip()
-                st.experimental_rerun()
-            else:
-                st.error("Please enter your email address to continue.")
-
 
 # ---------- DASHBOARD PAGE ----------
-def dashboard_page(email: str):
+def dashboard_page():
+    email = st.user.email
     st.title("Health Dashboard")
     st.success(f"Welcome, {email}!")
 
     if st.button("Log Out"):
-        if hasattr(st, "logout"):
-            st.logout()
-        st.session_state.pop("user_email", None)
-        st.experimental_rerun()
+        st.logout()
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
         ["Symptoms Log", "Exercise Recommendation", "Data Visuals", "Diet Module", "Profile/Settings"]
@@ -272,9 +254,9 @@ def dashboard_page(email: str):
 
 
 # ---------- AUTH CHECK ----------
-current_email = get_current_user_email()
-if not current_email:
+# Let Streamlit manage auth state entirely via st.user — no session_state needed
+if not hasattr(st, "user") or not st.user.is_logged_in:
     login_page()
     st.stop()
 else:
-    dashboard_page(current_email)
+    dashboard_page()
