@@ -7,10 +7,7 @@ from utils.model import get_mealplan_model, build_mealplan_features, get_model, 
 from mealplan.meals import meal_plans
 import matplotlib.pyplot as plt
 import pandas as pd
-try:
-    import seaborn as sns
-except Exception:
-    sns = None
+import seaborn as sns
 
 
 # ---------- Helpers ----------
@@ -176,11 +173,7 @@ def dashboard_page():
                 df[symptom_cols] = df[symptom_cols].fillna(0)
 
                 fig, ax = plt.subplots(figsize=(18, 9))
-                if sns:
-                    sns.heatmap(df[symptom_cols].T, cmap="YlGnBu", cbar=True, linewidths=0.5, linecolor='gray', ax=ax)
-                else:
-                    im = ax.imshow(df[symptom_cols].T, aspect='auto', cmap="YlGnBu")
-                    plt.colorbar(im, ax=ax)
+                sns.heatmap(df[symptom_cols].T, cmap="YlGnBu", cbar=True, linewidths=0.5, linecolor='gray', ax=ax)
                 ax.set_title("Symptom Presence Heatmap")
                 st.pyplot(fig)
 
@@ -274,8 +267,13 @@ def dashboard_page():
 
 
 # ---------- AUTH CHECK ----------
+# ---------- AUTH CHECK ----------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+
+# 🐛 TEMP DEBUG — remove after fixing
+st.write("is_logged_in:", st.user.is_logged_in if hasattr(st, "user") else "no st.user")
+st.write("session logged_in:", st.session_state.logged_in)
 
 if hasattr(st, "user") and st.user and st.user.is_logged_in:
     st.session_state.logged_in = True
