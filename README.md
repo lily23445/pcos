@@ -53,13 +53,6 @@ streamlit run h1.py
 
 Then open the URL shown in the terminal, usually `http://localhost:8501`.
 
-## Local Usage Notes
-
-- Local Google sign-in is disabled in the app; the login page shows a placeholder button.
-- Data is stored locally under `user_data/<email>/`:
-  - `profile.json`
-  - `weekly_log.csv`
-- Existing sample user folders are available for reference in `user_data/`.
 
 ## Troubleshooting
 
