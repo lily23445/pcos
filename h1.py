@@ -7,7 +7,10 @@ from utils.model import get_mealplan_model, build_mealplan_features, get_model, 
 from mealplan.meals import meal_plans
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
+try:
+    import seaborn as sns
+except Exception:
+    sns = None
 
 
 # ---------- Helpers ----------
@@ -56,11 +59,11 @@ def login_page():
         )
 
         # --- Streamlit Cloud (real Google OAuth) ---
+        # --- Streamlit Cloud (real Google OAuth) ---
         if hasattr(st, "login"):
             if st.button("Sign in with Google", type="primary"):
-                st.login("google")  # Streamlit Cloud OAuth
-                st.stop()
-        else:  # running locally
+                st.login("google")  # ✅ Remove st.stop() — let it redirect naturally
+        else:
             st.button("Sign in with Google", disabled=True)
             st.info("Google login works once you deploy to Streamlit Cloud.")
 
@@ -173,7 +176,11 @@ def dashboard_page():
                 df[symptom_cols] = df[symptom_cols].fillna(0)
 
                 fig, ax = plt.subplots(figsize=(18, 9))
-                sns.heatmap(df[symptom_cols].T, cmap="YlGnBu", cbar=True, linewidths=0.5, linecolor='gray', ax=ax)
+                if sns:
+                    sns.heatmap(df[symptom_cols].T, cmap="YlGnBu", cbar=True, linewidths=0.5, linecolor='gray', ax=ax)
+                else:
+                    im = ax.imshow(df[symptom_cols].T, aspect='auto', cmap="YlGnBu")
+                    plt.colorbar(im, ax=ax)
                 ax.set_title("Symptom Presence Heatmap")
                 st.pyplot(fig)
 
