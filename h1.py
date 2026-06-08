@@ -24,7 +24,6 @@ def inject_local_css(path: str):
         st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
-# Only inject CSS if file exists
 if os.path.exists("assets/theme.css"):
     inject_local_css("assets/theme.css")
 
@@ -55,11 +54,9 @@ def login_page():
             unsafe_allow_html=True,
         )
 
-        # --- Streamlit Cloud (real Google OAuth) ---
-        # --- Streamlit Cloud (real Google OAuth) ---
         if hasattr(st, "login"):
             if st.button("Sign in with Google", type="primary"):
-                st.login("google")  # ✅ Remove st.stop() — let it redirect naturally
+                st.login("google")
         else:
             st.button("Sign in with Google", disabled=True)
             st.info("Google login works once you deploy to Streamlit Cloud.")
@@ -67,15 +64,12 @@ def login_page():
 
 # ---------- DASHBOARD PAGE ----------
 def dashboard_page():
+    email = st.user.email
     st.title("Health Dashboard")
-    st.success(f"Welcome, {st.session_state.email}!")
+    st.success(f"Welcome, {email}!")
 
     if st.button("Log Out"):
-        if hasattr(st, "logout"):
-            st.logout()  # Cloud logout
-        st.session_state.logged_in = False
-        st.session_state.email = None
-        st.rerun()
+        st.logout()
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
         ["Symptoms Log", "Exercise Recommendation", "Data Visuals", "Diet Module", "Profile/Settings"]
@@ -110,7 +104,7 @@ def dashboard_page():
                         "Hair loss(Y/N)": 1 if hair_loss == "Yes" else 0,
                         "Notes": other_symptoms,
                     }
-                    store.append_weekly(entry, st.session_state.email)
+                    store.append_weekly(entry, email)
                     st.success("Symptoms logged successfully!")
 
     # ---- Exercise Recommendation ----
@@ -128,15 +122,11 @@ def dashboard_page():
             and reducing stress. A balanced mix of cardio, strength training, and relaxation exercises works best.
             """)
             with st.expander("1️. Cardio / Aerobic Exercises"):
-                st.write(
-                    "• Do 3–5 times per week (30–45 minutes)\n• Brisk walking, jogging, cycling, swimming, or dancing")
-
+                st.write("• Do 3–5 times per week (30–45 minutes)\n• Brisk walking, jogging, cycling, swimming, or dancing")
             with st.expander("2️. Strength Training"):
                 st.write("• Do 2–3 times per week\n• Bodyweight exercises, resistance bands, or weights")
-
             with st.expander("3️. HIIT"):
                 st.write("• Do 1–2 times per week\n• Short bursts of high effort followed by rest")
-
             with st.expander("4️. Yoga & Stress Relief"):
                 st.write("• Yoga, Pilates, stretching routines to reduce cortisol and balance hormones")
 
@@ -149,7 +139,6 @@ def dashboard_page():
     # ---- Data Visuals ----
     with tab3:
         st.header("View Your Cycle (Data Visuals)")
-        email = st.session_state.get("email", None)
 
         try:
             profile = store.load_profile(email)
@@ -195,7 +184,6 @@ def dashboard_page():
                 safe_image("assets/dietmodule.png", use_container_width=True)
 
             with col2:
-                email = st.session_state.get("email")  # FIX: Define email here!
                 profile = store.load_profile(email)
 
                 if not profile:
@@ -234,7 +222,6 @@ def dashboard_page():
                 safe_image("assets/profile.png", use_container_width=True)
 
             with col2:
-                email = st.session_state.get("email")
                 profile = store.load_profile(email)
 
                 if not isinstance(profile, dict):
@@ -253,7 +240,7 @@ def dashboard_page():
 
                     if st.form_submit_button("Update Profile"):
                         store.save_profile(
-                            st.session_state.email,
+                            email,
                             {
                                 "name": name, "Age": age, "BMI": bmi, "Waist": waist,
                                 "AMH": amh, "TSH": tsh, "LH": lh, "FSH": fsh, "PRL": prl,
@@ -267,19 +254,8 @@ def dashboard_page():
 
 
 # ---------- AUTH CHECK ----------
-# ---------- AUTH CHECK ----------
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-# 🐛 TEMP DEBUG — remove after fixing
-st.write("is_logged_in:", st.user.is_logged_in if hasattr(st, "user") else "no st.user")
-st.write("session logged_in:", st.session_state.logged_in)
-
-if hasattr(st, "user") and st.user and st.user.is_logged_in:
-    st.session_state.logged_in = True
-    st.session_state.email = st.user.email
-
-if not st.session_state.logged_in:
+# Let Streamlit manage auth state entirely via st.user — no session_state needed
+if not hasattr(st, "user") or not st.user.is_logged_in:
     login_page()
     st.stop()
 else:
